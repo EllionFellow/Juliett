@@ -189,9 +189,7 @@ namespace Juliett
 
         private void StartupFile()
         {
-            if (!File.Exists("set.ini"))
-                File.Create("set.ini");
-            else
+            if (File.Exists("set.ini"))
             {
                 settings = File.ReadAllLines("set.ini");
                 SettingsFileToProgram();
