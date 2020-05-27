@@ -16,6 +16,7 @@ namespace Juliett
 {
     public partial class Form1 : Form
     {
+        public bool programEnabled;
         string[] settings;
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern uint GetCurrentThreadId();
@@ -31,9 +32,29 @@ namespace Juliett
         public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
 
         globalKeyboardHook gkh1 = new globalKeyboardHook();
+        globalKeyboardHook gkh2 = new globalKeyboardHook();
 
 
-
+        private void EnableProgramm()
+        {
+            programEnabled = true;
+            gkh1.hook();
+            gkh2.unhook();
+            startToolStripMenuItem.Checked = true;
+            stopToolStripMenuItem.Checked = false;
+            pictureBox1.Image = Resources.V;
+            notifyIcon1.Icon = Resources.V1;
+        }
+        private void DisableProgramm()
+        {
+            programEnabled = false;
+            gkh1.unhook();
+            gkh2.hook();
+            stopToolStripMenuItem.Checked = true;
+            startToolStripMenuItem.Checked = false;
+            pictureBox1.Image = Resources.X;
+            notifyIcon1.Icon = Resources.X1;
+        }
 
         private void functionlOne(object sender, KeyEventArgs e)
         {
@@ -100,11 +121,8 @@ namespace Juliett
                         PostMessage(GetFocusedControl(), 0x0102, ch, 1);
                     }
                     break;
-                case Keys.F11:
-                    //----------------//
-                    break;
                 case Keys.F12:
-                    //----------------//
+                    DisableProgramm();
                     break;
                 default:
                     break;
@@ -113,6 +131,15 @@ namespace Juliett
             
             e.Handled = true;//запрет получения клавиш другими приложениями
         }
+
+        private void functionlTwo(object sender, KeyEventArgs e)
+        {
+            EnableProgramm();
+            e.Handled = true;//запрет получения клавиш другими приложениями
+        }
+
+
+
 
         private IntPtr GetFocusedControl()
         {
@@ -129,14 +156,17 @@ namespace Juliett
             AttachThreadInput(GetWindowThreadProcessId(hFore, out id), GetCurrentThreadId(), false);
             return hFocus;
         }
+
+        
         public Form1()
         {
-            StartupFile();
+            
 
             InitializeComponent();
             ShowTheForm(this);
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
             #region HotKeys
+            gkh2.HookedKeys.Add(Keys.F11);
             gkh1.HookedKeys.Add(Keys.F1);
             gkh1.HookedKeys.Add(Keys.F2);
             gkh1.HookedKeys.Add(Keys.F3);
@@ -147,10 +177,13 @@ namespace Juliett
             gkh1.HookedKeys.Add(Keys.F8);
             gkh1.HookedKeys.Add(Keys.F9);
             gkh1.HookedKeys.Add(Keys.F10);
-            gkh1.HookedKeys.Add(Keys.F11);
             gkh1.HookedKeys.Add(Keys.F12);
             #endregion
             gkh1.KeyDown += new KeyEventHandler(functionlOne);
+            gkh2.KeyDown += new KeyEventHandler(functionlTwo);
+            EnableProgramm();
+            StartupFile();
+
         }
 
 
@@ -167,8 +200,65 @@ namespace Juliett
 
         private void SettingsFileToProgram()
         {
-
+            settings = File.ReadAllLines("set.ini");
+            if (settings.Length>0)
+            {
+                for (int i = 0; i < settings.Length && i<10; i++)
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            textBox1.Text = settings[0];
+                            break;
+                        case 1:
+                            textBox2.Text = settings[1];
+                            break;
+                        case 2:
+                            textBox3.Text = settings[2];
+                            break;
+                        case 3:
+                            textBox4.Text = settings[3];
+                            break;
+                        case 4:
+                            textBox5.Text = settings[4];
+                            break;
+                        case 5:
+                            textBox6.Text = settings[5];
+                            break;
+                        case 6:
+                            textBox7.Text = settings[6];
+                            break;
+                        case 7:
+                            textBox8.Text = settings[7];
+                            break;
+                        case 8:
+                            textBox9.Text = settings[8];
+                            break;
+                        case 9:
+                            textBox10.Text = settings[9];
+                            break;
+                    }
+                }
+            }
         }
+
+        private void SettingsProgramToFile()
+        {
+            using (StreamWriter sw = File.CreateText("set.ini"))
+            {
+                sw.WriteLine($"{textBox1.Text}");
+                sw.WriteLine($"{textBox2.Text}");
+                sw.WriteLine($"{textBox3.Text}");
+                sw.WriteLine($"{textBox4.Text}");
+                sw.WriteLine($"{textBox5.Text}");
+                sw.WriteLine($"{textBox6.Text}");
+                sw.WriteLine($"{textBox7.Text}");
+                sw.WriteLine($"{textBox8.Text}");
+                sw.WriteLine($"{textBox9.Text}");
+                sw.WriteLine($"{textBox10.Text}");
+            }
+        }
+
 
         #region SmoothWindows
         private async void ShowTheForm(Form form)
@@ -208,27 +298,69 @@ namespace Juliett
         }
         #endregion
 
-
+        
         private void AboutButton(object sender, EventArgs e)
         {
-            MessageBox.Show("Made by EllioN\nEspecially for Nimfea Noctis", "About", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            bool form2Moving = false;
+            int oldMousePos2X = 0, oldMousePos2Y = 0;
+            Form form2 = new Form();
+            if (form2 == null)
+            {
+                form2 = new Form();
+            }
+            Label labFor2 = new Label();
+            Label labFor22 = new Label();
+            Button butFor2 = new Button();
+            
+            form2.BackColor = System.Drawing.Color.Black;
+            form2.BackgroundImage = Resources.N;
+            form2.BackgroundImageLayout = ImageLayout.Stretch;
+            form2.ClientSize = new System.Drawing.Size(150, 150);
+            form2.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            form2.Opacity = 0D;
+            form2.Controls.Add(butFor2);
+            form2.Controls.Add(labFor2);
+            form2.Controls.Add(labFor22);
+            labFor2.Location = new Point(5, 5);
+            labFor2.Height = 25;
+            labFor2.Width = 130;
+            labFor2.Text = "Only for Nimfea Noctis";
+            labFor2.ForeColor = Color.White;
+            labFor22.Location = new Point(5, form2.Height - 25);
+            labFor22.Height = 25;
+            labFor22.Width = 130;
+            labFor22.Text = "Only for Nimfea Noctis";
+            labFor22.ForeColor = Color.White;
+            form2.Show();
+            butFor2.BackColor = System.Drawing.Color.Black;
+            butFor2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            butFor2.ForeColor = System.Drawing.Color.White;
+            butFor2.Location = new System.Drawing.Point(124, 2);
+            butFor2.Name = "button1";
+            butFor2.Size = new System.Drawing.Size(24, 23);
+            butFor2.TabIndex = 0;
+            butFor2.Text = "V";
+            butFor2.UseVisualStyleBackColor = false;
+            butFor2.Click += (s, swe) => { UnShowTheForm(form2); form2.Close(); };
+            form2.MouseDown += (s, swe) =>
+            {
+                form2Moving = true;
+                oldMousePos2X = swe.X;
+                oldMousePos2Y = swe.Y;
+            };
+            form2.MouseMove += (s, swe) => { if (form2Moving) form2.Location = new Point(form2.Location.X + swe.X - oldMousePos2X, form2.Location.Y + swe.Y - oldMousePos2Y);};
+            form2.MouseUp += (s, swe) => { form2Moving = false;};
+            ShowTheForm(form2);
         }
+
 
         private void ClosingTheProgram(object sender, EventArgs e)
         {
-            gkh1.unhook();
+            DisableProgramm();
+            gkh2.unhook();
             Close();
         }
 
-        private void StopTheProgram(object sender, EventArgs e)
-        {
-            gkh1.unhook();
-        }
-
-        private void StartTheProgramm(object sender, EventArgs e)
-        {
-            gkh1.hook();
-        }
 
         private void notifyIcon1_MouseDoubleClick(object sender, MouseEventArgs e)
         {
@@ -244,17 +376,203 @@ namespace Juliett
 
         private void startToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StartTheProgramm(this, null);
+            EnableProgramm();
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            StopTheProgram(this, null);
+            DisableProgramm();
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            SettingsProgramToFile();
             ClosingTheProgram(this, null);
         }
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            if (programEnabled)
+            {
+                DisableProgramm();
+            }
+            else
+            {
+                EnableProgramm();
+            }
+        }
+
+        private static readonly int minChB = 26;
+        private static readonly int maxChB = 111;
+        private void textBox1_Enter(object sender, EventArgs e)
+        {
+            textBox1.Height = maxChB;
+            textBox1.BringToFront();
+        }
+        private void textBox2_Enter(object sender, EventArgs e)
+        {
+            textBox2.Height = maxChB;
+            textBox2.BringToFront();
+        }
+        private void textBox3_Enter(object sender, EventArgs e)
+        {
+            textBox3.Height = maxChB;
+            textBox3.BringToFront();
+        }
+        private void textBox4_Enter(object sender, EventArgs e)
+        {
+            textBox4.Height = maxChB;
+            textBox4.BringToFront();
+        }
+        private void textBox5_Enter(object sender, EventArgs e)
+        {
+            textBox5.Height = maxChB;
+            textBox5.BringToFront();
+        }
+        private void textBox6_Enter(object sender, EventArgs e)
+        {
+            textBox6.Height = maxChB;
+            textBox6.BringToFront();
+        }
+        private void textBox7_Enter(object sender, EventArgs e)
+        {
+            textBox7.Height = maxChB;
+            textBox7.BringToFront();
+        }
+        private void textBox8_Enter(object sender, EventArgs e)
+        {
+            textBox8.Height = maxChB;
+            textBox8.BringToFront();
+            textBox8.Location = new Point(textBox8.Location.X,textBox8.Location.Y- maxChB+minChB);
+        }
+        private void textBox9_Enter(object sender, EventArgs e)
+        {
+            textBox9.Height = maxChB;
+            textBox9.BringToFront();
+            textBox9.Location = new Point(textBox9.Location.X, textBox9.Location.Y - maxChB + minChB);
+        }
+        private void textBox10_Enter(object sender, EventArgs e)
+        {
+            textBox10.Height = maxChB;
+            textBox10.BringToFront();
+            textBox10.Location = new Point(textBox10.Location.X, textBox10.Location.Y - maxChB + minChB);
+        }
+
+        private void textBox1_Leave(object sender, EventArgs e)
+        {
+            textBox1.Height = minChB;
+        }
+        private void textBox2_Leave(object sender, EventArgs e)
+        {
+            textBox2.Height = minChB;
+        }
+        private void textBox3_Leave(object sender, EventArgs e)
+        {
+            textBox3.Height = minChB;
+        }
+        private void textBox4_Leave(object sender, EventArgs e)
+        {
+            textBox4.Height = minChB;
+        }
+        private void textBox5_Leave(object sender, EventArgs e)
+        {
+            textBox5.Height = minChB;
+        }
+        private void textBox6_Leave(object sender, EventArgs e)
+        {
+            textBox6.Height = minChB;
+        }
+        private void textBox7_Leave(object sender, EventArgs e)
+        {
+            textBox7.Height = minChB;
+        }
+        private void textBox8_Leave(object sender, EventArgs e)
+        {
+            textBox8.Height = minChB;
+            textBox8.Location = new Point(textBox8.Location.X, textBox8.Location.Y + maxChB - minChB);
+        }
+        private void textBox9_Leave(object sender, EventArgs e)
+        {
+            textBox9.Height = minChB;
+            textBox9.Location = new Point(textBox9.Location.X, textBox9.Location.Y + maxChB - minChB);
+        }
+        private void textBox10_Leave(object sender, EventArgs e)
+        {
+            textBox10.Height = minChB;
+            textBox10.Location = new Point(textBox10.Location.X, textBox10.Location.Y + maxChB - minChB);
+        }
+        private void Form1_Click(object sender, EventArgs e)
+        {
+            ActiveControl = null;
+        }
+
+
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox1.Lines.Length > 8) { textBox1.ScrollBars = ScrollBars.Vertical; }else { textBox1.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox2_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox2.Lines.Length > 8) { textBox2.ScrollBars = ScrollBars.Vertical; } else { textBox2.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox3.Lines.Length > 8) { textBox3.ScrollBars = ScrollBars.Vertical; } else { textBox3.ScrollBars = ScrollBars.None; }
+
+        }
+        private void textBox4_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox4.Lines.Length > 8) { textBox4.ScrollBars = ScrollBars.Vertical; } else { textBox4.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox5_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox5.Lines.Length > 8) { textBox5.ScrollBars = ScrollBars.Vertical; } else { textBox5.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox6.Lines.Length > 8) { textBox6.ScrollBars = ScrollBars.Vertical; } else { textBox6.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox7.Lines.Length > 8) { textBox7.ScrollBars = ScrollBars.Vertical; } else { textBox7.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox8_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox8.Lines.Length > 8) { textBox8.ScrollBars = ScrollBars.Vertical; } else { textBox8.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox9_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox9.Lines.Length > 8) { textBox9.ScrollBars = ScrollBars.Vertical; } else { textBox9.ScrollBars = ScrollBars.None; }
+        }
+        private void textBox10_TextChanged(object sender, EventArgs e)
+        {
+            if (textBox10.Lines.Length > 8) { textBox10.ScrollBars = ScrollBars.Vertical; } else { textBox10.ScrollBars = ScrollBars.None; }
+        }
+
+        private int oldMousePosX, oldMousePosY;
+        private bool formMoving = false;
+
+
+
+        private void Form1_MouseDown(object sender, MouseEventArgs e)
+        {
+            oldMousePosX = e.X;
+            oldMousePosY = e.Y;
+            formMoving = true;
+        }
+
+        private void Form1_MouseUp(object sender, MouseEventArgs e)
+        {
+            formMoving = false;
+        }
+
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (formMoving)
+            {
+                Location = new Point(Location.X+e.X - oldMousePosX,Location.Y+e.Y - oldMousePosY);
+            }
+        }
+
     }
 }
