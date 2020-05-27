@@ -26,5 +26,6 @@ namespace Juliett.Properties
                 return defaultInstance;
             }
         }
+        public static Settings textBox1Value { get; set; }
     }
 }
