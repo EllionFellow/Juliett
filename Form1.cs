@@ -78,7 +78,6 @@ namespace Juliett
                         PostMessage(GetFocusedControl(), 0x0102, ch, 1);
                     }
                     break;
-                    break;
                 case Keys.F4:
                     foreach (char ch in textBox4.Text)
                     {
@@ -160,8 +159,6 @@ namespace Juliett
         
         public Form1()
         {
-            
-
             InitializeComponent();
             ShowTheForm(this);
             notifyIcon1.ContextMenuStrip = contextMenuStrip1;
@@ -183,78 +180,39 @@ namespace Juliett
             gkh2.KeyDown += new KeyEventHandler(functionlTwo);
             EnableProgramm();
             StartupFile();
-
+            
         }
 
 
         private void StartupFile()
         {
-            if (File.Exists("set.ini"))
-            {
-                settings = File.ReadAllLines("set.ini");
-                SettingsFileToProgram();
-            }
+            textBox1.Text = Settings.Default["textBox1Text"].ToString();
+            textBox2.Text = Settings.Default["textBox2Text"].ToString();
+            textBox3.Text = Settings.Default["textBox3Text"].ToString();
+            textBox4.Text = Settings.Default["textBox4Text"].ToString();
+            textBox5.Text = Settings.Default["textBox5Text"].ToString();
+            textBox6.Text = Settings.Default["textBox6Text"].ToString();
+            textBox7.Text = Settings.Default["textBox7Text"].ToString();
+            textBox8.Text = Settings.Default["textBox8Text"].ToString();
+            textBox9.Text = Settings.Default["textBox9Text"].ToString();
+            textBox10.Text = Settings.Default["textBox10Text"].ToString();
         }
 
-        private void SettingsFileToProgram()
-        {
-            settings = File.ReadAllLines("set.ini");
-            if (settings.Length>0)
-            {
-                for (int i = 0; i < settings.Length && i<10; i++)
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            textBox1.Text = settings[0];
-                            break;
-                        case 1:
-                            textBox2.Text = settings[1];
-                            break;
-                        case 2:
-                            textBox3.Text = settings[2];
-                            break;
-                        case 3:
-                            textBox4.Text = settings[3];
-                            break;
-                        case 4:
-                            textBox5.Text = settings[4];
-                            break;
-                        case 5:
-                            textBox6.Text = settings[5];
-                            break;
-                        case 6:
-                            textBox7.Text = settings[6];
-                            break;
-                        case 7:
-                            textBox8.Text = settings[7];
-                            break;
-                        case 8:
-                            textBox9.Text = settings[8];
-                            break;
-                        case 9:
-                            textBox10.Text = settings[9];
-                            break;
-                    }
-                }
-            }
-        }
+        
 
         private void SettingsProgramToFile()
         {
-            using (StreamWriter sw = File.CreateText("set.ini"))
-            {
-                sw.WriteLine($"{textBox1.Text}");
-                sw.WriteLine($"{textBox2.Text}");
-                sw.WriteLine($"{textBox3.Text}");
-                sw.WriteLine($"{textBox4.Text}");
-                sw.WriteLine($"{textBox5.Text}");
-                sw.WriteLine($"{textBox6.Text}");
-                sw.WriteLine($"{textBox7.Text}");
-                sw.WriteLine($"{textBox8.Text}");
-                sw.WriteLine($"{textBox9.Text}");
-                sw.WriteLine($"{textBox10.Text}");
-            }
+            Settings.Default["textBox1Text"] = textBox1.Text;
+            Settings.Default["textBox2Text"] = textBox2.Text;
+            Settings.Default["textBox3Text"] = textBox3.Text;
+            Settings.Default["textBox4Text"] = textBox4.Text;
+            Settings.Default["textBox5Text"] = textBox5.Text;
+            Settings.Default["textBox6Text"] = textBox6.Text;
+            Settings.Default["textBox7Text"] = textBox7.Text;
+            Settings.Default["textBox8Text"] = textBox8.Text;
+            Settings.Default["textBox9Text"] = textBox9.Text;
+            Settings.Default["textBox10Text"] = textBox10.Text;
+            Settings.Default.Save();
         }
 
 
@@ -292,6 +250,7 @@ namespace Juliett
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
+            SettingsProgramToFile();
             UnShowTheForm(this);
         }
         #endregion
