@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,7 +11,6 @@ namespace Juliett
     public partial class Form1 : Form
     {
         public bool programEnabled;
-        string[] settings;
         [DllImport("kernel32.dll", SetLastError = true)]
         static extern uint GetCurrentThreadId();
         [DllImport("user32")]
@@ -179,12 +172,12 @@ namespace Juliett
             gkh1.KeyDown += new KeyEventHandler(functionlOne);
             gkh2.KeyDown += new KeyEventHandler(functionlTwo);
             EnableProgramm();
-            StartupFile();
+            StartupSettings();
             
         }
 
 
-        private void StartupFile()
+        private void StartupSettings()
         {
             textBox1.Text = Settings.Default["textBox1Text"].ToString();
             textBox2.Text = Settings.Default["textBox2Text"].ToString();
@@ -200,7 +193,7 @@ namespace Juliett
 
         
 
-        private void SettingsProgramToFile()
+        private void CloseupSettings()
         {
             Settings.Default["textBox1Text"] = textBox1.Text;
             Settings.Default["textBox2Text"] = textBox2.Text;
@@ -250,7 +243,7 @@ namespace Juliett
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SettingsProgramToFile();
+            CloseupSettings();
             UnShowTheForm(this);
         }
         #endregion
@@ -343,7 +336,7 @@ namespace Juliett
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SettingsProgramToFile();
+            CloseupSettings();
             ClosingTheProgram(this, null);
         }
         private void pictureBox1_Click(object sender, EventArgs e)
