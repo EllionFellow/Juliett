@@ -15,7 +15,7 @@ namespace Juliett
         /// defines the callback type for the hook
         /// </summary>
         public delegate int keyboardHookProc(int code, int wParam, ref keyboardHookStruct lParam);
-
+        
         public struct keyboardHookStruct
         {
             public int vkCode;
@@ -60,6 +60,7 @@ namespace Juliett
         /// </summary>
         public globalKeyboardHook()
         {
+            hookProcDelegate = hookProc;
             hook();
         }
 
@@ -77,10 +78,14 @@ namespace Juliett
         /// <summary>
         /// Installs the global hook
         /// </summary>
+        /// 
+
+        //IntPtr hhook = IntPtr.Zero;
+        private keyboardHookProc hookProcDelegate;
         public void hook()
         {
             IntPtr hInstance = LoadLibrary("User32");
-            hhook = SetWindowsHookEx(WH_KEYBOARD_LL, hookProc, hInstance, 0);
+            hhook = SetWindowsHookEx(WH_KEYBOARD_LL, hookProcDelegate, hInstance, 0);
         }
 
         /// <summary>

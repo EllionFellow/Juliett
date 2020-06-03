@@ -49,69 +49,160 @@ namespace Juliett
             notifyIcon1.Icon = Resources.X1;
         }
 
-        private void functionlOne(object sender, KeyEventArgs e)
+        private async void functionlOne(object sender, KeyEventArgs e)
         {
+            e.Handled = true;//запрет получения клавиш другими приложениями
             switch (e.KeyCode)
             {
                 case Keys.F1:
                     foreach (char ch in textBox1.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F2:
                     foreach (char ch in textBox2.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F3:
                     foreach (char ch in textBox3.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F4:
                     foreach (char ch in textBox4.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F5:
                     foreach (char ch in textBox5.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F6:
                     foreach (char ch in textBox6.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F7:
                     foreach (char ch in textBox7.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F8:
                     foreach (char ch in textBox8.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F9:
                     foreach (char ch in textBox9.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F10:
                     foreach (char ch in textBox10.Text)
                     {
-                        PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        if (ch == '\n')
+                        {
+                            SendKeys.Send("{Enter}");
+                            await Task.Delay(20);
+                        }
+                        else
+                        {
+                            PostMessage(GetFocusedControl(), 0x0102, ch, 1);
+                        }
                     }
+                    SendKeys.Send("{Enter}");
                     break;
                 case Keys.F12:
                     DisableProgramm();
@@ -121,7 +212,6 @@ namespace Juliett
             }
 
             
-            e.Handled = true;//запрет получения клавиш другими приложениями
         }
 
         private void functionlTwo(object sender, KeyEventArgs e)
